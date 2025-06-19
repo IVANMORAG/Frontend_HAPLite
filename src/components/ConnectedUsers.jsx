@@ -60,15 +60,26 @@ export default function ConnectedUsers({ users, loading, onUsersUpdate }) {
     try {
       const response = await setSpeedLimit(ip, rxLimit, txLimit);
       if (response.success) {
-        // NUEVO: Actualizar estado local inmediatamente
-        const limitString = `${(rxLimit/1000000).toFixed(1)} / ${(txLimit/1000000).toFixed(1)}`;
+        // NUEVO: Actualizar estado local inmediatamente con información más detallada
+        let displayText;
+        if (rxLimit === 0 && txLimit === 0) {
+          displayText = 'Internet Bloqueado';
+        } else if (rxLimit === 0) {
+          displayText = `Subida Bloqueada / ${(txLimit/1000000).toFixed(1)} Mbps`;
+        } else if (txLimit === 0) {
+          displayText = `${(rxLimit/1000000).toFixed(1)} Mbps / Descarga Bloqueada`;
+        } else {
+          displayText = `${(rxLimit/1000000).toFixed(1)} / ${(txLimit/1000000).toFixed(1)} Mbps`;
+        }
+        
         setLocalSpeedLimits(prev => ({
           ...prev,
           [ip]: {
             hasLimit: true,
-            displayText: limitString + ' Mbps',
+            displayText: displayText,
             rxLimit,
             txLimit,
+            isBlocked: rxLimit === 0 || txLimit === 0,
             appliedAt: Date.now()
           }
         }));
@@ -423,7 +434,13 @@ export default function ConnectedUsers({ users, loading, onUsersUpdate }) {
                     <div className="flex justify-between items-center">
                       <span className="text-gray-600 font-medium">⚡ Velocidad:</span>
                       <div className="flex items-center space-x-2">
-                        <span className="font-bold text-green-600">
+                        <span className={`font-bold ${
+                          localSpeedLimits[user.ip]?.isBlocked || getSpeedDisplay(user).includes('BLOQUEADO') || getSpeedDisplay(user).includes('Bloqueado')
+                            ? 'text-red-600' 
+                            : hasSpeedLimit(user) 
+                              ? 'text-orange-600' 
+                              : 'text-green-600'
+                        }`}>
                           {getSpeedDisplay(user)}
                         </span>
                         {hasSpeedLimit(user) && (
