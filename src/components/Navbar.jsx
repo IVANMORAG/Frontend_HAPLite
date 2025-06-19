@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../services/auth'
+import InstallPWAButton from './InstallPWAButton';
 
 export default function Navbar() {
   const { user, logout } = useAuth()
@@ -7,6 +8,7 @@ export default function Navbar() {
   if (!user) return null
 
   return (
+    
     <nav className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
@@ -23,6 +25,7 @@ export default function Navbar() {
             >
               Cerrar sesión
             </button>
+             <InstallPWAButton />
           </div>
         </div>
       </div>
