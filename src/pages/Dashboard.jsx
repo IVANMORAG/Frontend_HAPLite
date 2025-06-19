@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { getConnectedUsers, getBandwidthHistory } from '../services/api';
 import { subscribeToBandwidth, unsubscribeFromBandwidth, getSocketStatus } from '../services/socket';
 import ConnectedUsers from '../components/ConnectedUsers';
@@ -16,10 +16,24 @@ export default function Dashboard() {
     bandwidth: null
   });
   const [socketConnected, setSocketConnected] = useState(false);
+  
+  // Refs para evitar bucles infinitos
+  const lastUsersUpdate = useRef(0);
+  const isUpdatingUsers = useRef(false);
 
-  // Cargar usuarios conectados
-  const loadUsers = useCallback(async () => {
+  // Cargar usuarios conectados (SIN useCallback para evitar dependencias)
+  const loadUsers = async () => {
+    // Evitar llamadas múltiples simultáneas
+    if (isUpdatingUsers.current) return;
+    
+    // Evitar llamadas muy frecuentes (mínimo 2 segundos entre llamadas)
+    const now = Date.now();
+    if (now - lastUsersUpdate.current < 2000) return;
+    
     try {
+      isUpdatingUsers.current = true;
+      lastUsersUpdate.current = now;
+      
       setLoading(prev => ({ ...prev, users: true }));
       setError(prev => ({ ...prev, users: null }));
       
@@ -35,8 +49,9 @@ export default function Dashboard() {
       setError(prev => ({ ...prev, users: err.message }));
     } finally {
       setLoading(prev => ({ ...prev, users: false }));
+      isUpdatingUsers.current = false;
     }
-  }, []);
+  };
 
   // Cargar historial de ancho de banda
   const loadBandwidthHistory = useCallback(async () => {
@@ -58,7 +73,7 @@ export default function Dashboard() {
     } finally {
       setLoading(prev => ({ ...prev, bandwidth: false }));
     }
-  }, []);
+  }, []); // Sin dependencias
 
   // Manejador de datos del WebSocket
   const handleBandwidthData = useCallback((newData) => {
@@ -70,19 +85,9 @@ export default function Dashboard() {
     }
     
     setBandwidthData(prev => {
-      // Agregar interfaces a los datos existentes si no están
-      const existingInterfaces = {};
-      prev.forEach(item => {
-        if (item.interface) {
-          existingInterfaces[item.interface] = true;
-        }
-      });
-
-      // Combinar datos por interfaz
       const combinedData = [...prev];
       
       newData.forEach(newItem => {
-        // Si es la misma interfaz, agregar al final
         combinedData.push(newItem);
       });
 
@@ -103,30 +108,32 @@ export default function Dashboard() {
     const checkInterval = setInterval(() => {
       const status = getSocketStatus();
       setSocketConnected(status.connected);
-    }, 1000);
+    }, 2000); // Cada 2 segundos, no cada segundo
 
     return () => clearInterval(checkInterval);
   }, []);
 
-  // Cargar datos iniciales
+  // Cargar datos iniciales UNA SOLA VEZ
   useEffect(() => {
     console.log('[Dashboard] Cargando datos iniciales...');
     loadUsers();
     loadBandwidthHistory();
 
-    // Actualizar usuarios cada 30 segundos
-    const usersInterval = setInterval(loadUsers, 30000);
+    // Actualizar usuarios cada 30 segundos SOLAMENTE
+    const usersInterval = setInterval(() => {
+      console.log('[Dashboard] Actualizando usuarios por interval...');
+      loadUsers();
+    }, 30000);
     
     return () => {
       clearInterval(usersInterval);
     };
-  }, [loadUsers, loadBandwidthHistory]);
+  }, []); // Array vacío - solo se ejecuta al montar
 
-  // Configurar WebSocket
+  // Configurar WebSocket UNA SOLA VEZ
   useEffect(() => {
     console.log('[Dashboard] Configurando WebSocket...');
     
-    // Pequeño delay para asegurar que el socket esté listo
     const timeout = setTimeout(() => {
       subscribeToBandwidth(handleBandwidthData);
     }, 500);
@@ -136,7 +143,15 @@ export default function Dashboard() {
       console.log('[Dashboard] Limpiando WebSocket...');
       unsubscribeFromBandwidth();
     };
-  }, [handleBandwidthData]);
+  }, []); // Array vacío - solo se ejecuta al montar
+
+  // Función para actualizar usuarios manualmente (para ConnectedUsers)
+  const handleUsersUpdate = useCallback(() => {
+    console.log('[Dashboard] Actualización manual de usuarios solicitada');
+    setTimeout(() => {
+      loadUsers();
+    }, 1000);
+  }, []);
 
   // Calcular estadísticas
   const stats = {
@@ -213,11 +228,12 @@ export default function Dashboard() {
       <div className="bg-white rounded-lg shadow p-6">
         <ConnectedUsers 
           users={users} 
-          loading={loading.users} 
+          loading={loading.users}
+          onUsersUpdate={loadUsers}
         />
       </div>
 
-      {/* Botón de Actualización */}
+      {/* Botón de Actualización Manual */}
       <div className="flex justify-center space-x-4">
         <button
           onClick={() => {
