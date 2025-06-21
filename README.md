@@ -2,6 +2,9 @@
 
 Una aplicación web moderna y responsive para monitorear y gestionar usuarios conectados a routers MikroTik en tiempo real. Controla el ancho de banda, bloquea usuarios y visualiza el tráfico de red con una interfaz intuitiva.
 
+<a target="_blank" align="center">
+  <img align="center" height="450" width="1000" alt="GIF" src="https://github.com/IVANMORAG/facial-point-detection/blob/main/recursos/Facial-Point-detector.gif">
+</a>
 
 ## ✨ Características Principales
 
