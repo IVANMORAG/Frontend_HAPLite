@@ -132,6 +132,8 @@ routerflow/
 
 ## 🌐 Configuración del Backend
 
+>> https://github.com/IVANMORAG/HAPLite-API
+
 Esta aplicación requiere el backend RouterFlow para funcionar. Asegúrate de que esté corriendo en el puerto configurado (5001 por defecto).
 
 ### Endpoints principales:
