@@ -1,13 +1,7 @@
-# 🌐 RouterFlow
-
-**Control inteligente de tu red MikroTik**
+# 🌐**Control inteligente de tu red MikroTik**
 
 Una aplicación web moderna y responsive para monitorear y gestionar usuarios conectados a routers MikroTik en tiempo real. Controla el ancho de banda, bloquea usuarios y visualiza el tráfico de red con una interfaz intuitiva.
 
-[![React](https://img.shields.io/badge/React-18.3.1-blue.svg)](https://reactjs.org/)
-[![Vite](https://img.shields.io/badge/Vite-4.5.14-purple.svg)](https://vitejs.dev/)
-[![TailwindCSS](https://img.shields.io/badge/Tailwind-3.4.17-teal.svg)](https://tailwindcss.com/)
-[![PWA](https://img.shields.io/badge/PWA-Ready-green.svg)](https://web.dev/progressive-web-apps/)
 
 ## ✨ Características Principales
 
