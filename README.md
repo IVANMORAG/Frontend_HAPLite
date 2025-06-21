@@ -20,15 +20,6 @@ Una aplicación web moderna y responsive para monitorear y gestionar usuarios co
 - 🎨 **UI Moderna** - Interfaz responsive con TailwindCSS
 - 🔄 **Auto-actualización** - Datos sincronizados automáticamente
 
-## 🚀 Demo en Vivo
-
-> **Nota**: Añade aquí el enlace a tu demo cuando esté disponible
-
-## 📸 Capturas de Pantalla
-
-| Dashboard Principal | Gestión de Usuarios | Gráficas en Tiempo Real |
-|:---:|:---:|:---:|
-| ![Dashboard](./docs/images/dashboard.png) | ![Users](./docs/images/users.png) | ![Charts](./docs/images/charts.png) |
 
 ## 🛠️ Tecnologías Utilizadas
 
