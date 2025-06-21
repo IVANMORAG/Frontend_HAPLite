@@ -271,31 +271,4 @@ Para ver logs detallados en desarrollo:
 
 Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
 
-## 👨‍💻 Autor
-
-**Tu Nombre**
-- GitHub: [@tu-usuario](https://github.com/IVANMORAG)
-- Email: ivanmoragarcia412@gmail.com
-
-## 🙏 Agradecimientos
-
-- [MikroTik](https://mikrotik.com/) por la API del RouterOS
-- [React](https://reactjs.org/) por el framework
-- [TailwindCSS](https://tailwindcss.com/) por el sistema de diseño
-- [Chart.js](https://www.chartjs.org/) por las gráficas
-- [Vite](https://vitejs.dev/) por el excelente build tool
-
-## 📊 Estado del Proyecto
-
-- ✅ **Core Features** - Completado
-- ✅ **PWA Support** - Completado  
-- ✅ **Real-time Data** - Completado
-- 🔄 **Tests** - Completado
-- 📝 **Documentation** - Completado
-
----
-
-⭐ **¡Si este proyecto te resulta útil, considera darle una estrella en GitHub!**
-
----
 
