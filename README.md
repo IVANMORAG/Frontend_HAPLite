@@ -1,4 +1,4 @@
-# 🌐**Control inteligente de tu red MikroTik**
+# 🌐 **Control inteligente de tu red MikroTik**
 
 Una aplicación web moderna y responsive para monitorear y gestionar usuarios conectados a routers MikroTik en tiempo real. Controla el ancho de banda, bloquea usuarios y visualiza el tráfico de red con una interfaz intuitiva.
 
